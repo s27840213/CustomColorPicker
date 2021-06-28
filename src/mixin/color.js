@@ -44,7 +44,6 @@ function _colorChange(data, oldHue) {
   //   hsl.s = data.s || (data.hsl && data.hsl.s) || 0
   // }
   /* ------ */
-  console.log('color change!')
   return {
     hsl: hsl,
     hex: color.toHexString().toUpperCase(),
@@ -53,8 +52,7 @@ function _colorChange(data, oldHue) {
     hsv: hsv,
     oldHue: data.h || oldHue || hsl.h,
     source: data.source,
-    a: data.a || color.getAlpha(),
-    test: 'test'
+    a: data.a || color.getAlpha()
   }
 }
 
@@ -68,11 +66,9 @@ export default {
   computed: {
     colors: {
       get() {
-        console.log('get value')
         return this.val
       },
       set(newVal) {
-        console.log('set value')
         this.val = newVal
         this.$emit('input', newVal)
       }
@@ -81,7 +77,6 @@ export default {
   watch: {
     value: {
       handler(newVal) {
-        console.log('watch value')
         this.val = _colorChange(newVal)
       },
       deep: true
