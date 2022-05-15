@@ -8,6 +8,7 @@
   ],
   "main": "dist/vue-color.min.js",
   "scripts": {
+    "serve": "node serve",
     "example": "node build/build.js",
     "dev": "node build/dev-server.js",
     "gh": "npm run example && node build/deploy",

@@ -19,8 +19,13 @@
           </div>
         </div>
         <div class="demo-item">
-          <chrome-picker :value="colors" @input="updateValue"></chrome-picker>
-          <h2>Chrome</h2>
+          <chrome-picker
+            :value="colors"
+            @input="updateValue"
+            :disableFields="true"
+            :disableAlpha="true"
+            :isMobile="false"
+          ></chrome-picker>
         </div>
       </div>
     </div>
@@ -28,7 +33,6 @@
 </template>
 
 <script>
-import material from '../src/components/Material.vue'
 import chrome from '../src/components/Chrome.vue'
 
 let defaultProps = {
@@ -147,6 +151,8 @@ html {
   margin-bottom: 10px;
   margin: 0 10px 0 10px;
   z-index: 2;
+  background: white;
+  padding: 10px;
 }
 .demo-item h2 {
   margin: 0;

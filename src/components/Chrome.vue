@@ -1,12 +1,22 @@
 <template>
-  <div role="application" aria-label="Chrome color picker" :class="['vc-chrome', disableAlpha ? 'vc-chrome__disable-alpha' : '']">
-    <div class="vc-chrome-saturation-wrap">
+  <div
+    role="application"
+    aria-label="Chrome color picker"
+    :class="['vc-chrome', disableAlpha ? 'vc-chrome__disable-alpha' : '']"
+    :style="pickerStyles"
+  >
+    <div class="vc-chrome-saturation-wrap" :style="saturationWrapStyles">
       <saturation v-model="colors" @change="childChange"></saturation>
     </div>
-    <div class="vc-chrome-body">
+    <div class="vc-chrome-body" :style="bodyPadding">
       <div class="vc-chrome-controls">
-        <div class="vc-chrome-color-wrap">
-          <div :aria-label="`current color is ${colors.hex}`" class="vc-chrome-active-color" :style="{background: activeColor}"></div>
+        <div class="vc-chrome-color-wrap" :style="colorWrapStyles">
+          <div
+            v-if="!isMobile"
+            :aria-label="`current color is ${colors.hex}`"
+            class="vc-chrome-active-color"
+            :style="{ background: activeColor }"
+          ></div>
           <checkboard v-if="!disableAlpha"></checkboard>
         </div>
 
@@ -24,23 +34,51 @@
         <div class="vc-chrome-fields" v-show="fieldsIndex === 0">
           <!-- hex -->
           <div class="vc-chrome-field">
-            <ed-in v-if="!hasAlpha" label="hex" :value="colors.hex" @change="inputChange"></ed-in>
-            <ed-in v-if="hasAlpha" label="hex" :value="colors.hex8" @change="inputChange"></ed-in>
+            <ed-in
+              v-if="!hasAlpha"
+              label="hex"
+              :value="colors.hex"
+              @change="inputChange"
+            ></ed-in>
+            <ed-in
+              v-if="hasAlpha"
+              label="hex"
+              :value="colors.hex8"
+              @change="inputChange"
+            ></ed-in>
           </div>
         </div>
         <div class="vc-chrome-fields" v-show="fieldsIndex === 1">
           <!-- rgba -->
           <div class="vc-chrome-field">
-            <ed-in label="r" :value="colors.rgba.r" @change="inputChange"></ed-in>
+            <ed-in
+              label="r"
+              :value="colors.rgba.r"
+              @change="inputChange"
+            ></ed-in>
           </div>
           <div class="vc-chrome-field">
-            <ed-in label="g" :value="colors.rgba.g" @change="inputChange"></ed-in>
+            <ed-in
+              label="g"
+              :value="colors.rgba.g"
+              @change="inputChange"
+            ></ed-in>
           </div>
           <div class="vc-chrome-field">
-            <ed-in label="b" :value="colors.rgba.b" @change="inputChange"></ed-in>
+            <ed-in
+              label="b"
+              :value="colors.rgba.b"
+              @change="inputChange"
+            ></ed-in>
           </div>
           <div class="vc-chrome-field" v-if="!disableAlpha">
-            <ed-in label="a" :value="colors.a" :arrow-offset="0.01" :max="1" @change="inputChange"></ed-in>
+            <ed-in
+              label="a"
+              :value="colors.a"
+              :arrow-offset="0.01"
+              :max="1"
+              @change="inputChange"
+            ></ed-in>
           </div>
         </div>
         <div class="vc-chrome-fields" v-show="fieldsIndex === 2">
@@ -55,17 +93,34 @@
             <ed-in label="l" :value="hsl.l" @change="inputChange"></ed-in>
           </div>
           <div class="vc-chrome-field" v-if="!disableAlpha">
-            <ed-in label="a" :value="colors.a" :arrow-offset="0.01" :max="1" @change="inputChange"></ed-in>
+            <ed-in
+              label="a"
+              :value="colors.a"
+              :arrow-offset="0.01"
+              :max="1"
+              @change="inputChange"
+            ></ed-in>
           </div>
         </div>
         <!-- btn -->
-        <div class="vc-chrome-toggle-btn" role="button" aria-label="Change another color definition" @click="toggleViews">
+        <div
+          class="vc-chrome-toggle-btn"
+          role="button"
+          aria-label="Change another color definition"
+          @click="toggleViews"
+        >
           <div class="vc-chrome-toggle-icon">
-            <svg style="width:24px; height:24px" viewBox="0 0 24 24"
+            <svg
+              style="width: 24px; height: 24px"
+              viewBox="0 0 24 24"
               @mouseover="showHighlight"
               @mouseenter="showHighlight"
-              @mouseout="hideHighlight">
-              <path fill="#333" d="M12,18.17L8.83,15L7.42,16.41L12,21L16.59,16.41L15.17,15M12,5.83L15.17,9L16.58,7.59L12,3L7.41,7.59L8.83,9L12,5.83Z" />
+              @mouseout="hideHighlight"
+            >
+              <path
+                fill="#333"
+                d="M12,18.17L8.83,15L7.42,16.41L12,21L16.59,16.41L15.17,15M12,5.83L15.17,9L16.58,7.59L12,3L7.41,7.59L8.83,9L12,5.83Z"
+              />
             </svg>
           </div>
           <div class="vc-chrome-toggle-icon-highlight" v-show="highlight"></div>
@@ -88,11 +143,19 @@ export default {
   name: 'Chrome',
   mixins: [colorMixin],
   props: {
+    pickerWidth: {
+      type: Number,
+      default: 225
+    },
     disableAlpha: {
       type: Boolean,
       default: false
     },
     disableFields: {
+      type: Boolean,
+      default: false
+    },
+    isMobile: {
       type: Boolean,
       default: false
     }
@@ -104,14 +167,14 @@ export default {
     'ed-in': editableInput,
     checkboard
   },
-  data () {
+  data() {
     return {
       fieldsIndex: 0,
       highlight: false
     }
   },
   computed: {
-    hsl () {
+    hsl() {
       const { h, s, l } = this.colors.hsl
       return {
         h: h.toFixed(),
@@ -119,19 +182,46 @@ export default {
         l: `${(l * 100).toFixed()}%`
       }
     },
-    activeColor () {
+    activeColor() {
       const rgba = this.colors.rgba
       return 'rgba(' + [rgba.r, rgba.g, rgba.b, rgba.a].join(',') + ')'
     },
-    hasAlpha () {
+    hasAlpha() {
       return this.colors.a < 1
+    },
+    pickerStyles() {
+      return {
+        width: `${this.pickerWidth}px`,
+        height: '100%',
+        boxShadow: this.isMobile ? 'none' : '0 0 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)'
+      }
+    },
+    bodyPadding() {
+      return this.isMobile ? {
+        padding: '12px 0px 0px'
+      } : {
+        padding: '12px 12px 12px'
+      }
+    },
+    colorWrapStyles() {
+      return this.isMobile ? {
+        width: '0px'
+      } : {
+      }
+    },
+    saturationWrapStyles() {
+      return this.isMobile ? {
+        borderRadius: '5px'
+      } : {
+        borderRadius: '2px 2px 0 0'
+      }
     }
   },
   methods: {
-    childChange (data) {
+    childChange(data) {
       this.colorChange(data)
     },
-    inputChange (data) {
+    inputChange(data) {
       if (!data) {
         return
       }
@@ -160,17 +250,17 @@ export default {
         })
       }
     },
-    toggleViews () {
+    toggleViews() {
       if (this.fieldsIndex >= 2) {
         this.fieldsIndex = 0
         return
       }
-      this.fieldsIndex ++
+      this.fieldsIndex++
     },
-    showHighlight () {
+    showHighlight() {
       this.highlight = true
     },
-    hideHighlight () {
+    hideHighlight() {
       this.highlight = false
     }
   }
@@ -181,11 +271,11 @@ export default {
 .vc-chrome {
   background: #fff;
   border-radius: 2px;
-  box-shadow: 0 0 2px rgba(0,0,0,.3), 0 4px 8px rgba(0,0,0,.3);
   box-sizing: initial;
-  width: 225px;
   font-family: Menlo;
   background-color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 .vc-chrome-controls {
   display: flex;
@@ -255,12 +345,13 @@ export default {
   height: 10px;
 }
 .vc-chrome-hue-wrap .vc-hue {
-  border-radius: 2px;
+  border-radius: 5px;
 }
 .vc-chrome-alpha-wrap .vc-alpha-gradient {
   border-radius: 2px;
 }
-.vc-chrome-hue-wrap .vc-hue-picker, .vc-chrome-alpha-wrap .vc-alpha-picker {
+.vc-chrome-hue-wrap .vc-hue-picker,
+.vc-chrome-alpha-wrap .vc-alpha-picker {
   width: 12px;
   height: 12px;
   border-radius: 6px;
@@ -269,14 +360,12 @@ export default {
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
 }
 .vc-chrome-body {
-  padding: 16px 16px 12px;
   background-color: #fff;
 }
 .vc-chrome-saturation-wrap {
   width: 100%;
-  padding-bottom: 55%;
+  height: 100%;
   position: relative;
-  border-radius: 2px 2px 0 0;
   overflow: hidden;
 }
 .vc-chrome-saturation-wrap .vc-saturation-circle {
