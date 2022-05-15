@@ -25,6 +25,7 @@
             :disableFields="true"
             :disableAlpha="true"
             :isMobile="false"
+            :aspectRatio="55"
           ></chrome-picker>
         </div>
       </div>

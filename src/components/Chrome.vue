@@ -158,6 +158,10 @@ export default {
     isMobile: {
       type: Boolean,
       default: false
+    },
+    aspectRatio: {
+      type: Number,
+      default: 56.25
     }
   },
   components: {
@@ -191,9 +195,7 @@ export default {
     },
     pickerStyles() {
       return {
-        width: `${this.pickerWidth}px`,
-        height: '100%',
-        boxShadow: this.isMobile ? 'none' : '0 0 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)'
+        width: `${this.pickerWidth}px`
       }
     },
     bodyPadding() {
@@ -211,8 +213,10 @@ export default {
     },
     saturationWrapStyles() {
       return this.isMobile ? {
+        paddingBottom: `${this.aspectRatio}%`,
         borderRadius: '5px'
       } : {
+        paddingBottom: `${this.aspectRatio}%`,
         borderRadius: '2px 2px 0 0'
       }
     }
@@ -364,7 +368,6 @@ export default {
 }
 .vc-chrome-saturation-wrap {
   width: 100%;
-  height: 100%;
   position: relative;
   overflow: hidden;
 }
