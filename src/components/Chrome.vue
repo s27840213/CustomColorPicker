@@ -380,7 +380,7 @@ export default {
   border-radius: 2px;
   border: none;
   box-shadow: inset 0 0 0 1px #dadada;
-  height: 21px;
+  height: 20px;
   text-align: center;
 }
 .vc-chrome-fields .vc-input__label {
