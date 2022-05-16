@@ -595,6 +595,10 @@ exports.default = {
       type: Number,
       default: 225
     },
+    fullWidth: {
+      type: Boolean,
+      default: false
+    },
     disableAlpha: {
       type: Boolean,
       default: false
@@ -648,7 +652,7 @@ exports.default = {
     },
     pickerStyles: function pickerStyles() {
       return {
-        width: this.pickerWidth + 'px'
+        width: this.fullWidth ? '100%' : this.pickerWidth + 'px'
       };
     },
     bodyPadding: function bodyPadding() {
